@@ -47,7 +47,7 @@ def standard_func(standard, aggressive, choose_type_text):
 
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='\nTrack your spending', command=lambda:track_func(budget_dict, has_plan))
+    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
     track_button.pack()
 
 def aggressive_func(standard, aggressive, choose_type_text):
@@ -67,7 +67,7 @@ def aggressive_func(standard, aggressive, choose_type_text):
 
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='\nTrack your spending', command=lambda:track_func(budget_dict, has_plan))
+    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
     track_button.pack()
 
 def plan_1(premade, custom, choose_plan_text):
@@ -152,7 +152,7 @@ def confirm_func(confirm, edit):
     
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='\nTrack your spending', command=lambda:track_func(budget_dict, has_plan))
+    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
     track_button.pack()
 
 def save_func(container):
@@ -277,7 +277,7 @@ def track_func(budget_dict, has_plan):
         spent_entry.pack()
         spending_dict[key] = spent_entry
     
-    compare_button = tk.Button(main_frame, text='\nGenerate summary', command=lambda:compare_func(budget_dict, spending_dict))
+    compare_button = tk.Button(main_frame, text='Generate summary', command=lambda:compare_func(budget_dict, spending_dict))
     compare_button.pack()
 
 title_label = Label(main_frame, text = '\nTnG Budget Planner')
