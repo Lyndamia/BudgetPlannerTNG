@@ -2,6 +2,8 @@ import json
 import tkinter as tk
 from tkinter import messagebox
 
+LARGE_FONT = ("Arial", 12)
+
 def load_data():
     try:
         with open('budget_data.json', 'r') as file:
@@ -27,7 +29,6 @@ def clear_frame(frame):
         widget.destroy()
 
 def get_budget_suggestion(monthly_data, user_name, main_frame):
-
     clear_frame(main_frame)
 
     if user_name not in monthly_data or len(monthly_data[user_name]) < 1:
@@ -51,22 +52,21 @@ def get_budget_suggestion(monthly_data, user_name, main_frame):
     else:
         suggestion_text = "You are right on track! No changes needed to your budget plan."
 
-    suggestion_label = tk.Label(main_frame, text=f"--- Budget Suggestion for {user_name} ---")
-    suggestion_label.pack()
+    suggestion_label = tk.Label(main_frame, text=f"----- Budget Suggestion for {user_name} -----", font=LARGE_FONT)
+    suggestion_label.pack(pady=10)
     
-    suggestion_content = tk.Label(main_frame, text=suggestion_text)
-    suggestion_content.pack()
+    suggestion_content = tk.Label(main_frame, text=suggestion_text, font=LARGE_FONT)
+    suggestion_content.pack(pady=5)
 
 def display_data(monthly_data, user_name, main_frame):
-
     clear_frame(main_frame)
-    data_label = tk.Label(main_frame, text=f"--- Monthly Data Summary for {user_name} ---")
-    data_label.pack()
+    data_label = tk.Label(main_frame, text=f"----- Monthly Data Summary for {user_name} -----", font=LARGE_FONT)
+    data_label.pack(pady=10)
 
     if user_name not in monthly_data or not monthly_data[user_name]:
-        no_data_label = tk.Label(main_frame, text="No data available yet.")
-        no_data_label.pack()
+        no_data_label = tk.Label(main_frame, text="No data available yet.", font=LARGE_FONT)
+        no_data_label.pack(pady=5)
     else:
         for month, data in monthly_data[user_name].items():
-            month_label = tk.Label(main_frame, text=f"Total spending for {month}: RM {data['spending']:.2f} (Budget: RM {data['budget']:.2f})")
-            month_label.pack()
+            month_label = tk.Label(main_frame, text=f"Total spending for {month}: RM {data['spending']:.2f} (Budget: RM {data['budget']:.2f})", font=LARGE_FONT)
+            month_label.pack(pady=2)
