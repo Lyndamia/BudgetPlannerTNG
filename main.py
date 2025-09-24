@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from datetime import date, datetime
 import data_manager
+import spending_tracks
 
 window = tk.Tk()
 window.title('TnG Budget Planner')
@@ -18,6 +19,9 @@ monthly_income = 0.0
 user_name = ""
 monthly_spending_database = data_manager.load_data()
 income_var = None
+budget_dict = {}  # Make budget_dict a global variable with an initial empty dictionary.
+has_plan = False
+track_button = None
 
 # Font
 LARGE_FONT = ("Arial", 12)
@@ -282,7 +286,8 @@ def track_func(budget_dict, has_plan):
         return
     
     #plan_button.destroy()
-    track_button.destroy()
+    if track_button:
+        track_button.destroy()
 
     now = datetime.now()
     month = now.strftime("%B")
@@ -324,7 +329,7 @@ def show_main_menu():
     btn_budget_plan = Button(main_frame, text="1. See Budget Plan", font=BUTTON_FONT, command=show_budget_plan)
     btn_budget_plan.pack(pady=5)
 
-    btn_track_spending = Button(main_frame, text="2. Track Wants Spending (for 7 days)", font=BUTTON_FONT, command=show_spending_tracker)
+    btn_track_spending = Button(main_frame, text="2. Track Spending", font=BUTTON_FONT, command=show_spending_tracker)
     btn_track_spending.pack(pady=5)
 
     btn_data_management = Button(main_frame, text="3. See Monthly Data Management", font=BUTTON_FONT, command=show_data_management)
@@ -354,12 +359,17 @@ def show_budget_plan():
 
 def show_spending_tracker():
     clear_frame()
-    spending_tracker_label = Label(main_frame, text="Daily Spending Tracker Goes Here...", font=LARGE_FONT)
-    spending_tracker_label.pack(pady=10)
+    global budget_dict
     
+    if not budget_dict:
+        messagebox.showwarning("No Budget Plan", "You do not have a budget plan yet. Please create a plan first.")
+        show_main_menu()
+        return
     
+    spending_tracks.show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict)
     back_button = Button(main_frame, text="Back to Main Menu", font=BUTTON_FONT, command=show_main_menu)
     back_button.pack(pady=10)
+
 
 def show_data_management():
     clear_frame()
