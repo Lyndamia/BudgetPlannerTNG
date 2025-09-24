@@ -61,7 +61,7 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
     amount_entry = Entry(main_frame, textvariable=amount_var, font=LARGE_FONT)
     amount_entry.pack(pady=5)
 
-def save_spending():
+    def save_spending():
         """ Save the entered spending to the database """
         try:
             amount = float(amount_var.get())
@@ -100,3 +100,17 @@ def save_spending():
 
     save_button = Button(main_frame, text="Save Spending", font=BUTTON_FONT, command=save_spending)
     save_button.pack(pady=10)
+
+# Show today's spending history (if exists)
+month = datetime.now().strftime("%B")
+if user_name in monthly_spending_database and \
+    month in monthly_spending_database[user_name] and \
+    today_str in monthly_spending_database[user_name][month]["daily"]:
+     
+    Label(main_frame, text="Today's Spending:", font=LARGE_FONT).pack(pady=5)
+
+    today_spending = monthly_spending_database[user_name][month]["daily"][today_str]   
+    for cat, amt in today_spending.items():
+            Label(main_frame, text=f"{cat}: RM {amt:<.2f>}", font=LARGE_FONT).pack()
+
+            
