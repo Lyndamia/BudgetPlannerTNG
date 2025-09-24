@@ -50,3 +50,14 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
 
     for cat, amt in allowance_dict.items():
         Label(main_frame, text=f"{cat}: RM {amt:<.2f>}", font=LARGE_FONT).pack()
+
+    # Category dropdown (default to first category)
+    category_var = StringVar(value=list(budget_dict.keys())[0])
+    category_menu = OptionMenu(main_frame, category_var, *budget_dict.keys())
+    category_menu.pack(pady=5)
+
+    # input spending amount 
+    amount_var = StringVar()
+    amount_entry = Entry(main_frame, textvariable=amoount_var, font=LARGE_FONT)
+    amount_entry.pack(pady=5)
+    
