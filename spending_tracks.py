@@ -21,3 +21,32 @@ def get_daily_allowance(budget_dict):
     
     # Divide each category budget by number of days
     return {cat: round(amount / days_in_month, 2) for cat, amount in budget_dict.items()}
+
+def show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict):
+    """ Display the Daily Spending Tracker screen.
+     Users can log spending for categories and view daily allowance. """
+    
+    # Clear previous widgets
+    for widget in main_frame.winfo_children():
+        widget.destroy()
+
+    # Title
+    title_label = Label(main_frame, text="Daily Spending Tracker", font=LARGE_FONT)
+    title_label.pack(pady=10)
+
+    # Greeting
+    greeting_label = Label(main_frame, text=f"Hello, {user_name}!", font=LARGE_FONT)
+    greeting_label.pack(pady=5)         
+
+    #Show today's date
+    today_str = date.today().strftime("%B %d, %Y")
+    today_label = Label(main_frame, text=f"Today's Date: {today_str}", font=LARGE_FONT)
+    today_label.pack(pady=5)
+
+    #Show daily allowance per category
+    allowance_dict = get_daily_allowance(budget_dict)
+    allowance_label = Label(main_frame, text="Daily Suggested Allowance:", font=LARGE_FONT)
+    allowance_label.pack(pady=5)
+
+    for cat, amt in allowance_dict.items():
+        Label(main_frame, text=f"{cat}: RM {amt:<.2f>}", font=LARGE_FONT).pack()
