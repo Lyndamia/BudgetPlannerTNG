@@ -43,9 +43,9 @@ def standard_func(standard, aggressive, choose_type_text):
     standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Standard Plan)\n\n1. Needs (50%): RM{formula(needs)}\n2. Wants (30%): RM{formula(wants)}\n3. Savings (20%): RM{formula(savings)}')
     standard_label.pack(pady=10)
     budget_dict = {
-        'needs':formula(needs),
-        'wants':formula(wants),
-        'savings':formula(savings)
+        'Needs':formula(needs),
+        'Wants':formula(wants),
+        'Savings':formula(savings)
     }
     print(budget_dict)
 
@@ -63,9 +63,9 @@ def aggressive_func(standard, aggressive, choose_type_text):
     standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Aggressive Plan)\n\n1. Needs (40%): RM{formula(needs)}\n2. Wants (20%): RM{formula(wants)}\n3. Savings (40%): RM{formula(savings)}')
     standard_label.pack(pady=10)
     budget_dict = {
-        'needs':formula(needs),
-        'wants':formula(wants),
-        'savings':formula(savings)
+        'Needs':formula(needs),
+        'Wants':formula(wants),
+        'Savings':formula(savings)
     }
     print(budget_dict)
 
@@ -307,12 +307,8 @@ def track_func(budget_dict, has_plan):
     compare_button = tk.Button(main_frame, text='Generate summary', command=lambda:compare_func(budget_dict, spending_dict))
     compare_button.pack()
 
-def clear_frame():
-    for widget in main_frame.winfo_children():
-        widget.destroy()
-
 def show_main_menu():
-    clear_frame()
+    data_manager.clear_frame(main_frame)
 
     title_label = Label(main_frame, text='\nTnG Budget Planner', font=LARGE_FONT)
     title_label.pack(pady=10)
@@ -343,7 +339,7 @@ def show_main_menu():
 
 # Called from Main Menu
 def show_budget_plan():
-    clear_frame()
+    data_manager.clear_frame(main_frame)
     
     title_label = Label(main_frame, text='\nTnG Budget Planner', font=LARGE_FONT)
     title_label.pack(pady=10)
@@ -358,7 +354,7 @@ def show_budget_plan():
     back_button.pack(pady=10)
 
 def show_spending_tracker():
-    clear_frame()
+    data_manager.clear_frame(main_frame)
     global budget_dict
     
     if not budget_dict:
@@ -366,27 +362,24 @@ def show_spending_tracker():
         show_main_menu()
         return
     
-    spending_tracks.show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict)
-    back_button = Button(main_frame, text="Back to Main Menu", font=BUTTON_FONT, command=show_main_menu)
-    back_button.pack(pady=10)
-
+    spending_tracks.show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict, show_main_menu)
 
 def show_data_management():
-    clear_frame()
+    data_manager.clear_frame(main_frame)
     data_manager.display_data(monthly_spending_database, user_name, main_frame)
     back_button = Button(main_frame, text="Back to Main Menu", font=BUTTON_FONT, command=show_main_menu)
     back_button.pack(pady=10)
 
 def get_suggestion():
-    clear_frame()
+    data_manager.clear_frame(main_frame)
     data_manager.get_budget_suggestion(monthly_spending_database, user_name, main_frame)
     back_button = Button(main_frame, text="Back to Main Menu", font=BUTTON_FONT, command=show_main_menu)
     back_button.pack(pady=10)
 
 # Initial setup screen
 def setup_screen():
-    clear_frame()
-    
+    data_manager.clear_frame(main_frame)
+
     global user_name_entry, income_entry, income_var
 
     welcome_label = Label(main_frame, text="\nWelcome to the TnG Budget Planner!", font=LARGE_FONT)
