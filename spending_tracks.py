@@ -58,6 +58,45 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
 
     # input spending amount 
     amount_var = StringVar()
-    amount_entry = Entry(main_frame, textvariable=amoount_var, font=LARGE_FONT)
+    amount_entry = Entry(main_frame, textvariable=amount_var, font=LARGE_FONT)
     amount_entry.pack(pady=5)
-    
+
+def save_spending():
+        """ Save the entered spending to the database """
+        try:
+            amount = float(amount_var.get())
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Please enter a valid number for amount.")
+            return
+        
+        month = datetime.now().strftime("%B")
+
+        # Create user profile is missing
+        if user_name not in monthly_spending_database:
+            monthly_spending_database[user_name] = {}
+
+        # Create month entry if missing
+        if month not in monthly_spending_database[user_name]:
+            monthly_spending_database[user_name][month] = {
+                "budget": budget_dict,
+                "daily": {}
+            }
+
+        # Create today's record if missing
+        if today_str not in monthly_spending_database[user_name][month]["daily"]:
+            monthly_spending_database[user_name][month]["daily"][today_str] = {}
+
+        # Add amount to chosen category
+        category = category_var.get()
+        monthly_spending_database[user_name][month]["daily"][today_str][category] = \
+            monthly_spending_database[user_name][month]["daily"][today_str].get(category,0) + amount
+        
+        # Save to JSON
+        data_manager.save_data(monthly_spending_database, 'monthly_spending_database.json')
+        messagebox.showinfo("Success", f"Added RM {amount:.2f} to {category} for today.")
+
+        #Refresh display
+        show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict)    
+
+    save_button = Button(main_frame, text="Save Spending", font=BUTTON_FONT, command=save_spending)
+    save_button.pack(pady=10)
