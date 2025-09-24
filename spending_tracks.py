@@ -1,8 +1,7 @@
 # spending_tracks.py
 
 import tkinter as tk
-from tkinter import *
-from tkinter import messagebox
+from tkinter import Label, messagebox, StringVar, OptionMenu, Entry, Button
 from datetime import date, datetime
 import data_manager
 import calendar
@@ -10,6 +9,7 @@ import calendar
 # Font
 LARGE_FONT = ("Arial", 12)
 BUTTON_FONT = ("Arial", 12)
+
 
 def get_daily_allowance(budget_dict):
     """ Calculate daily allowance for each category 
@@ -21,6 +21,7 @@ def get_daily_allowance(budget_dict):
     
     # Divide each category budget by number of days
     return {cat: round(amount / days_in_month, 2) for cat, amount in budget_dict.items()}
+
 
 def show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict):
     """ Display the Daily Spending Tracker screen.
@@ -38,25 +39,26 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
     greeting_label = Label(main_frame, text=f"Hello, {user_name}!", font=LARGE_FONT)
     greeting_label.pack(pady=5)         
 
-    #Show today's date
-    today_str = date.today().strftime("%B %d, %Y")
+    # Show today's date
+    today_str = date.today().strftime("%Y-%m-%d")   
     today_label = Label(main_frame, text=f"Today's Date: {today_str}", font=LARGE_FONT)
     today_label.pack(pady=5)
 
-    #Show daily allowance per category
+    # Show daily allowance per category
     allowance_dict = get_daily_allowance(budget_dict)
     allowance_label = Label(main_frame, text="Daily Suggested Allowance:", font=LARGE_FONT)
     allowance_label.pack(pady=5)
 
     for cat, amt in allowance_dict.items():
-        Label(main_frame, text=f"{cat}: RM {amt:<.2f>}", font=LARGE_FONT).pack()
+        
+        Label(main_frame, text=f"{cat}: RM {amt:.2f}", font=LARGE_FONT).pack()
 
     # Category dropdown (default to first category)
     category_var = StringVar(value=list(budget_dict.keys())[0])
     category_menu = OptionMenu(main_frame, category_var, *budget_dict.keys())
     category_menu.pack(pady=5)
 
-    # input spending amount 
+    # Input spending amount 
     amount_var = StringVar()
     amount_entry = Entry(main_frame, textvariable=amount_var, font=LARGE_FONT)
     amount_entry.pack(pady=5)
@@ -71,7 +73,7 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
         
         month = datetime.now().strftime("%B")
 
-        # Create user profile is missing
+        # Create user profile if missing
         if user_name not in monthly_spending_database:
             monthly_spending_database[user_name] = {}
 
@@ -89,28 +91,28 @@ def show_spending_tracker(main_frame, user_name, monthly_spending_database, budg
         # Add amount to chosen category
         category = category_var.get()
         monthly_spending_database[user_name][month]["daily"][today_str][category] = \
-            monthly_spending_database[user_name][month]["daily"][today_str].get(category,0) + amount
+            monthly_spending_database[user_name][month]["daily"][today_str].get(category, 0) + amount
         
-        # Save to JSON
-        data_manager.save_data(monthly_spending_database, 'monthly_spending_database.json')
+        # Save to JSON 
+        data_manager.save_data(monthly_spending_database)
+
         messagebox.showinfo("Success", f"Added RM {amount:.2f} to {category} for today.")
 
-        #Refresh display
+        # Refresh display
         show_spending_tracker(main_frame, user_name, monthly_spending_database, budget_dict)    
 
+    
+    month = datetime.now().strftime("%B")
+    if (user_name in monthly_spending_database and
+        month in monthly_spending_database[user_name] and
+        today_str in monthly_spending_database[user_name][month]["daily"]):
+
+        Label(main_frame, text="Today's Spending:", font=LARGE_FONT).pack(pady=5)
+
+        today_spending = monthly_spending_database[user_name][month]["daily"][today_str]
+        for cat, amt in today_spending.items():
+            Label(main_frame, text=f"{cat}: RM {amt:.2f}", font=LARGE_FONT).pack()
+
+    # Save button
     save_button = Button(main_frame, text="Save Spending", font=BUTTON_FONT, command=save_spending)
     save_button.pack(pady=10)
-
-# Show today's spending history (if exists)
-month = datetime.now().strftime("%B")
-if user_name in monthly_spending_database and \
-    month in monthly_spending_database[user_name] and \
-    today_str in monthly_spending_database[user_name][month]["daily"]:
-     
-    Label(main_frame, text="Today's Spending:", font=LARGE_FONT).pack(pady=5)
-
-    today_spending = monthly_spending_database[user_name][month]["daily"][today_str]   
-    for cat, amt in today_spending.items():
-            Label(main_frame, text=f"{cat}: RM {amt:<.2f>}", font=LARGE_FONT).pack()
-
-            
