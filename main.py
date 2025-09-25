@@ -40,7 +40,7 @@ def standard_func(standard, aggressive, choose_type_text):
     needs = 50
     wants = 30
     savings = 20
-    standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Standard Plan)\n\n1. Needs (50%): RM{formula(needs)}\n2. Wants (30%): RM{formula(wants)}\n3. Savings (20%): RM{formula(savings)}')
+    standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Standard Plan)\n\n1. Needs (50%): RM{formula(needs)}\n2. Wants (30%): RM{formula(wants)}\n3. Savings (20%): RM{formula(savings)}', font=LARGE_FONT)
     standard_label.pack(pady=10)
     budget_dict = {
         'Needs':formula(needs),
@@ -51,8 +51,8 @@ def standard_func(standard, aggressive, choose_type_text):
 
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
-    track_button.pack()
+    track_button = tk.Button(main_frame, text='Track your spending', font=BUTTON_FONT, command=lambda:track_func(budget_dict, has_plan))
+    track_button.pack(pady=5)
 
 def aggressive_func(standard, aggressive, choose_type_text):
     global has_plan, budget_dict, track_button
@@ -60,7 +60,7 @@ def aggressive_func(standard, aggressive, choose_type_text):
     needs = 40
     wants = 20
     savings = 40
-    standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Aggressive Plan)\n\n1. Needs (40%): RM{formula(needs)}\n2. Wants (20%): RM{formula(wants)}\n3. Savings (40%): RM{formula(savings)}')
+    standard_label = Label(main_frame, text=f'\nSuggested Spending Limit (Aggressive Plan)\n\n1. Needs (40%): RM{formula(needs)}\n2. Wants (20%): RM{formula(wants)}\n3. Savings (40%): RM{formula(savings)}', font=LARGE_FONT)
     standard_label.pack(pady=10)
     budget_dict = {
         'Needs':formula(needs),
@@ -71,8 +71,8 @@ def aggressive_func(standard, aggressive, choose_type_text):
 
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
-    track_button.pack()
+    track_button = tk.Button(main_frame, text='Track your spending', font=BUTTON_FONT, command=lambda:track_func(budget_dict, has_plan))
+    track_button.pack(padx=5)
 
 def plan_1(premade, custom, choose_plan_text):
     choose_button_hide_1(choose_plan_text, premade, custom)
@@ -164,8 +164,8 @@ def confirm_func(confirm, edit, canvas_container):
     
     has_plan = True
 
-    track_button = tk.Button(main_frame, text='Track your spending', command=lambda:track_func(budget_dict, has_plan))
-    track_button.pack()
+    track_button = tk.Button(main_frame, text='Track your spending', font=BUTTON_FONT, command=lambda:track_func(budget_dict, has_plan))
+    track_button.pack(pady=5)
 
 def save_func(container, canvas_container):
     current_percentage = count_percentage()
@@ -234,20 +234,7 @@ def next_func(next_button):
     premade.pack(pady=5)
     custom.pack(pady=5)
 
-# Main menu Function
-def plan_func():
-    #plan_button.pack_forget()
-    track_button.pack_forget()
-    income_label = Label(main_frame, text = '\nMonthly Income: RM')
-    income_label.pack()
-    global income_var
-    income_var = StringVar()
-    income_input = Entry(main_frame, textvariable=income_var, validate='key')
-    income_input.pack()
-
-    next_button = tk.Button(main_frame, text='Next', command=lambda:next_func(next_button))
-    next_button.pack()
-
+# Function Spending tracks after Budgetplanner
 def compare_func(budget_dict, spending_dict):
     total = 0
     for key in budget_dict:
@@ -258,26 +245,26 @@ def compare_func(budget_dict, spending_dict):
 
         if spent > budget:
             over = spent - budget
-            warn_label = Label(main_frame, text=f"You exceeded the recommended limit for {key} by RM{over}!")
+            warn_label = Label(main_frame, text=f"\nYou exceeded the recommended limit for {key} by RM{over}!", font=LARGE_FONT)
             warn_label.pack()
         elif spent == budget:
-            warn_label = Label(main_frame, text=f"You have reached the recommended limit for {key} of RM{budget}!")
+            warn_label = Label(main_frame, text=f"\nYou have reached the recommended limit for {key} of RM{budget}!", font=LARGE_FONT)
             warn_label.pack()
         elif spent < budget:
             remain = budget - spent
-            warn_label = Label(main_frame, text=f"You are still within the recommended limit for {key}! You have RM{remain} remaining.")
+            warn_label = Label(main_frame, text=f"\nYou are still within the recommended limit for {key}! You have RM{remain} remaining.", font=LARGE_FONT)
             warn_label.pack()
         
     if total > float(income_var.get()):
         deficit = total - float(income_var.get())
-        msg_label = Label(main_frame, text=f"Bad news! You spent RM{deficit} more than what you earn!")
+        msg_label = Label(main_frame, text=f"\nBad news! You spent RM{deficit} more than what you earn!", font=LARGE_FONT)
         msg_label.pack()
     elif total == float(income_var.get()):
-        msg_label = Label(main_frame, text=f"You used up all {income_var.get()} of your earnings!")
+        msg_label = Label(main_frame, text=f"\nYou used up all {income_var.get()} of your earnings!", font=LARGE_FONT)
         msg_label.pack()
     elif total < float(income_var.get()):
         surplus = float(income_var.get()) - total
-        msg_label = Label(main_frame, text=f"Good news! You have a surplus of RM{surplus}!")
+        msg_label = Label(main_frame, text=f"\nGood news! You have a surplus of RM{surplus}!", font=LARGE_FONT)
         msg_label.pack()
 
 def track_func(budget_dict, has_plan):
@@ -292,21 +279,22 @@ def track_func(budget_dict, has_plan):
     now = datetime.now()
     month = now.strftime("%B")
     today_date = date.today()
-    date_label = Label(main_frame, text=f"\n{month}'s Spendings as of {today_date}\n")
+    date_label = Label(main_frame, text=f"\n{month}'s Spendings as of {today_date}\n", font=LARGE_FONT)
     date_label.pack()
 
     spending_dict = {}
     for key in budget_dict:
         spent_var = StringVar()
-        spent_label = Label(main_frame, text=f"Money spent for {key}:")
-        spent_entry = Entry(main_frame, textvariable=spent_var)
+        spent_label = Label(main_frame, text=f"Money spent for {key}:", font=LARGE_FONT)
+        spent_entry = Entry(main_frame, textvariable=spent_var, font=LARGE_FONT)
         spent_label.pack()
         spent_entry.pack()
         spending_dict[key] = spent_entry
     
-    compare_button = tk.Button(main_frame, text='Generate summary', command=lambda:compare_func(budget_dict, spending_dict))
-    compare_button.pack()
+    compare_button = tk.Button(main_frame, text='Generate summary', font=BUTTON_FONT, command=lambda:compare_func(budget_dict, spending_dict))
+    compare_button.pack(padx=5)
 
+# Main menu Function
 def show_main_menu():
     data_manager.clear_frame(main_frame)
 
