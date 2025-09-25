@@ -1,5 +1,3 @@
-# spending_tracks.py
-
 import tkinter as tk
 from tkinter import Label, messagebox, StringVar, OptionMenu, Entry, Button
 from datetime import datetime
